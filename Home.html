@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scrapbook Calendar - Oktober 2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ffe6f7, #e6f0ff);
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Nama di pojok kiri atas */
+    #username {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #6a5acd;
+      padding: 5px 12px;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+      user-select: none;
+    }
+
+    h1 {
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 2.8rem;
+      background: linear-gradient(90deg, #ff6ec7, #6a5acd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      /* Bouncing animation */
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      max-width: 900px;
+      margin: 0 auto 25px;
+    }
+
+    .day-header {
+      font-weight: bold;
+      text-transform: uppercase;
+      background: #6a5acd;
+      color: white;
+      padding: 10px 0;
+      border-radius: 8px;
+    }
+
+    .day {
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      min-height: 90px;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, background-color 0.3s ease;
+      overflow: visible;
+      z-index: 1;
+      cursor: default;
+    }
+
+    /* Hover effect for day box color change */
+    .day:hover {
+      transform: scale(1.05);
+      background-color: #e0d4ff;
+      z-index: 5;
+    }
+
+    .day-number {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin: 5px auto 0;
+      cursor: pointer;
+      position: relative;
+    }
+    /* 3 warna dot berbeda */
+    .dot.holiday {
+      background: #ff6ec7; /* pink */
+    }
+    .dot.school {
+      background: #5cb85c; /* green */
+    }
+    .dot.personal {
+      background: #f0ad4e; /* orange */
+    }
+
+    .dot-content {
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 280px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    /* Show dot content on dot hover */
+    .dot:hover + .dot-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .carousel-inner img {
+      border-radius: 10px;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .carousel-caption {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      color: white;
+    }
+
+    /* Icon inside carousel caption */
+    .carousel-caption i {
+      font-size: 1rem;
+      color: #ffd700;
+    }
+
+    /* Pagination buttons container */
+    #pagination {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    /* Dot legend under calendar */
+    #dot-legend {
+      max-width: 900px;
+      margin: 20px auto 0;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #444;
+    }
+
+    #dot-legend div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+
+    #dot-legend .dot-legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    #dot-legend .holiday-color {
+      background: #ff6ec7;
+    }
+
+    #dot-legend .school-color {
+      background: #5cb85c;
+    }
+
+    #dot-legend .personal-color {
+      background: #f0ad4e;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="username">Maverick</div>
+
+  <h1><i class="bi bi-calendar3"></i> Oktober 2025</h1>
+
+  <div class="calendar">
+    <!-- Header Hari -->
+    <div class="day-header">Min</div>
+    <div class="day-header">Sen</div>
+    <div class="day-header">Sel</div>
+    <div class="day-header">Rab</div>
+    <div class="day-header">Kam</div>
+    <div class="day-header">Jum</div>
+    <div class="day-header">Sab</div>
+
+    <!-- Empty days sebelum 1 Oktober (Rab) -->
+    <div class="day"></div>
+    <div class="day"></div>
+    <div class="day"></div>
+
+    <!-- Tanggal 1–14 -->
+    <div class="day"><div class="day-number">1</div></div>
+    <div class="day"><div class="day-number">2</div></div>
+    <div class="day"><div class="day-number">3</div></div>
+    <div class="day"><div class="day-number">4</div></div>
+    <div class="day"><div class="day-number">5</div></div>
+    <div class="day"><div class="day-number">6</div></div>
+    <div class="day"><div class="day-number">7</div></div>
+    <div class="day"><div class="day-number">8</div></div>
+    <div class="day"><div class="day-number">9</div></div>
+    <div class="day"><div class="day-number">10</div></div>
+    <div class="day"><div class="day-number">11</div></div>
+    <div class="day"><div class="day-number">12</div></div>
+    <div class="day"><div class="day-number">13</div></div>
+    <div class="day"><div class="day-number">14</div></div>
+
+    <!-- Tanggal 15 with single dot (holiday color) -->
+    <div class="day">
+      <div class="day-number">15</div>
+      <div class="dot holiday"></div>
+      <div class="dot-content p-2">
+        <div id="carousel15" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400" class="d-block w-100" alt="Foto 1" />
+              <div class="carousel-caption"><i class="bi bi-camera"></i> Jalan-jalan sore di taman kota.</div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400" class="d-block w-100" alt="Foto 2" />
+              <div class="carousel-caption"><i class="bi bi-cup-straw"></i> Nongkrong di kafe favorit.</div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?w=400" class="d-block w-100" alt="Foto 3" />
+              <div class="carousel-caption"><i class="bi bi-book"></i> Membaca buku baru.</div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carousel15" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carousel15" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tanggal 16 -->
+    <div class="day"><div class="day-number">16</div></div>
+
+    <!-- Tanggal 17 with single dot (school color) -->
+    <div class="day">
+      <div class="day-number">17</div>
+      <div class="dot school"></div>
+      <div class="dot-content p-2">
+        <div id="carousel17" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400" class="d-block w-100" alt="Foto 1" />
+              <div class="carousel-caption"><i class="bi bi-pencil-square"></i> Ujian matematika selesai.</div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://images.unsplash.com/photo-1523475496153-3fca0b62439e?w=400" class="d-block w-100" alt="Foto 2" />
+              <div class="carousel-caption"><i class="bi bi-people"></i> Diskusi kelompok.</div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carousel17" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carousel17" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tanggal 18 -->
+    <div class="day"><div class="day-number">18</div></div>
+
+    <!-- Tanggal 19 with single dot (personal color) -->
+    <div class="day">
+      <div class="day-number">19</div>
+      <div class="dot personal"></div>
+      <div class="dot-content p-2">
+        <div id="carousel19" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400" class="d-block w-100" alt="Foto 1" />
+              <div class="carousel-caption"><i class="bi bi-star"></i> Malam karaoke bersama teman.</div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carousel19" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carousel19" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tanggal 20-31 -->
+    <div class="day"><div class="day-number">20</div></div>
+    <div class="day"><div class="day-number">21</div></div>
+    <div class="day"><div class="day-number">22</div></div>
+    <div class="day"><div class="day-number">23</div></div>
+    <div class="day"><div class="day-number">24</div></div>
+    <div class="day"><div class="day-number">25</div></div>
+    <div class="day"><div class="day-number">26</div></div>
+    <div class="day"><div class="day-number">27</div></div>
+    <div class="day"><div class="day-number">28</div></div>
+    <div class="day"><div class="day-number">29</div></div>
+    <div class="day"><div class="day-number">30</div></div>
+    <div class="day"><div class="day-number">31</div></div>
+
+  </div>
+
+  <div id="dot-legend">
+    <div><div class="dot-legend-color holiday-color"></div>Holiday</div>
+    <div><div class="dot-legend-color school-color"></div>School</div>
+    <div><div class="dot-legend-color personal-color"></div>Personal</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
